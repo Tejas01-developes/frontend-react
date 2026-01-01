@@ -22,7 +22,7 @@ try{
         email:field.email,
         password:field.password
     }
-const addurl=await axios.post(/apis/register,payload);
+const addurl=await axios.post("/apis/register",payload);
 if(addurl.data.success){
     navigate("/")
 }

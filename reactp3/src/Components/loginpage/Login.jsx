@@ -20,7 +20,7 @@ const handlelogin=async()=>{
            email:field.email,
            password:field.password 
         }
-const logurl=await axios.post(/apis/login,payload,{withCredentials:true});
+const logurl=await axios.post("/apis/login",payload,{withCredentials:true});
 if(logurl.data.success){
 navigate("/home")
 }
