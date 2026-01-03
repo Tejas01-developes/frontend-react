@@ -1,0 +1,51 @@
+.contect{
+    height: 7vh;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+
+
+.addcontact{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    
+}
+
+.heading{
+    margin-left: 33%;
+    text-decoration: underline;
+    text-transform: uppercase;
+}
+
+.friends{
+
+height: 97vh;
+width: 25vw;
+border: 2px solid black;
+}
+
+.chat{
+
+height: 97vh;
+width: 80vw;
+border: 2px solid black;
+}
+
+.chatcontainer{
+    display: flex;
+}
+
+
+.select{
+  padding: 10px 10px;
+     background-color: aquamarine;
+     margin-top: 10px;
+     cursor: pointer;
+}
+
+.textarea{
+    margin-top: 20px;
+    width: 60vw;
+}

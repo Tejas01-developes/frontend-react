@@ -1,9 +1,10 @@
 
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {useNavigate} from 'react-router'
 const Login = () => {
 const[field,setfield]=useState({email:"",password:""})
+
 const navigate=useNavigate()
 const handlechange=(e)=>{
     setfield({
@@ -20,14 +21,27 @@ const handlelogin=async()=>{
            email:field.email,
            password:field.password 
         }
-const logurl=await axios.post("/apis/login",payload,{withCredentials:true});
+const logurl=await axios.post("http://localhost:3000/apis/login",payload,{withCredentials:true});
+const access=logurl.data.access;
 if(logurl.data.success){
 navigate("/home")
+localStorage.setItem("access",access)
+localStorage.setItem("email",field.email)
 }
     }catch(err){
         console.log("error",err)
     }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
