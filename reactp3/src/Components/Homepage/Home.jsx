@@ -63,22 +63,19 @@ if(socketref.current){
 socketref.current.emit("sendmessage",{
   sender:loggedemail,
   reciver:slt.friends_email,
-  type:doc ? "file": "text",
   msg,
-  filename:doc?.name
+  
 })
 }
 setchat((prev)=>[
 ...prev,
-doc
-?{
+// doc
+// ?{
+//   sender:loggedemail,
+//   msg
+// }:
+{
   sender:loggedemail,
-  type:"file",
-  filename:doc.name,
-  msg
-}:{
-  sender:loggedemail,
-  type:"text",
   msg
 }
 ])
@@ -188,7 +185,7 @@ slt && (
   chat.map((ms,i)=>(
     <div key={i} className={`direction ${ms.sender === loggedemail ? "right" : "left"}`}>
       {ms.type === "file" ? (
-        <a href={ms.msg} target='_blank' rel='noreferrer'>{ms.filename}</a>
+        <a href={ms.msg} download >{ms.msg}</a>
       ):(
         ms.msg
       )}
