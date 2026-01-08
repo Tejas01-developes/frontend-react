@@ -41,8 +41,8 @@ if(addurl.data.success){
 <input type="text" placeholder='Full name' name='name' value={field.name} onChange={handlechange} />
 <input type="email" placeholder='Email' name='email' value={field.email} onChange={handlechange} />
 <input type="password" placeholder='password' name='password' value={field.password} onChange={handlechange} />
-<button onClick={handleadd}>Make account</button>
-
+<button onClick={handleadd}>Make account</button> <hr />
+<button onClick={()=>window.location.href="http://localhost:3000/auth/google"}>Continue with google</button>
 
 
   </div>

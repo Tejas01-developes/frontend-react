@@ -10,6 +10,8 @@ const Home = () => {
     const[msg,setmsg]=useState("")
     const[doc,setdoc]=useState(null)
     const[chat,setchat]=useState([])
+    const[onlineusers,setonlineusers]=useState(new Set())
+    const[status,setstatus]=useState("offline")
     const socketref=useRef(null)
     const loggedemail=localStorage.getItem("email");
     const navigateadd=()=>{
@@ -23,7 +25,7 @@ const Home = () => {
         withCredentials:true
       })
       if(listurl.data.success){
-      console.log(listurl.data.friends)
+  
       setfrd(listurl.data.friends)
       }
       }catch(err){
@@ -120,13 +122,11 @@ useEffect(()=>{
   })
 
 
-
-
-
 socketref.current.emit("join",loggedemail)
 
-
-
+socketref.current.on("online",(users)=>{
+  setonlineusers(new Set(users))
+})
 
 socketref.current.on("recivermessage",(data)=>{
   if(data.sender === loggedemail)return 
@@ -142,8 +142,11 @@ return ()=>{socketref.current.disconnect();
 }
 },[]);
 
-
-
+useEffect(()=>{
+  if(!slt) return 
+  const isonline=onlineusers.has(slt.friends_email)
+  setstatus(isonline ? "online":"offline")
+},[onlineusers,slt])
 
 
 
@@ -177,6 +180,7 @@ frd.map((fr,i)=>(
   {
 slt && (
 <div>
+  <h1>{`chat with ${slt.friends_email}`} {status}</h1>
 <textarea name="textarea" className='textarea' placeholder='Write the message' value={msg} onChange={(e)=>setmsg(()=>e.target.value)}/>
 <button onClick={sendmessage}>send</button>
 <input type="file"  onChange={(e)=>setdoc(e.target.files[0])}  />
