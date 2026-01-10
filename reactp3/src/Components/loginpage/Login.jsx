@@ -4,9 +4,7 @@ import React, { useEffect, useState } from 'react'
 import {useNavigate} from 'react-router'
 const Login = () => {
 const[field,setfield]=useState({email:"",password:""})
-const search=new URLSearchParams(window.location.search);
-const token=search.get("access");
-console.log(token)
+
 const navigate=useNavigate()
 const handlechange=(e)=>{
     setfield({
@@ -24,7 +22,7 @@ const handlelogin=async()=>{
            password:field.password 
         }
 const logurl=await axios.post("http://localhost:3000/apis/login",payload,{withCredentials:true});
-const access=logurl.data.access && token;
+const access=logurl.data.access;
 
 if(logurl.data.success){
 navigate("/home")

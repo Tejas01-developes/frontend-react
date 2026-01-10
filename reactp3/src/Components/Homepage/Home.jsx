@@ -12,6 +12,8 @@ const Home = () => {
     const[chat,setchat]=useState([])
     const[onlineusers,setonlineusers]=useState(new Set())
     const[status,setstatus]=useState("offline")
+    const[typing,settyping]=useState(false);
+    const typingtimeout=useRef(null);
     const socketref=useRef(null)
     const loggedemail=localStorage.getItem("email");
     const navigateadd=()=>{
@@ -128,6 +130,22 @@ socketref.current.on("online",(users)=>{
   setonlineusers(new Set(users))
 })
 
+
+socketref.current.on("typing", ({ sender }) => {
+  if (sender === slt?.friends_email) {
+    settyping(true);
+  }
+});
+
+socketref.current.on("stop_typing", ({ sender }) => {
+  if (sender === slt?.friends_email) {
+    settyping(false);
+  }
+});
+
+
+
+
 socketref.current.on("recivermessage",(data)=>{
   if(data.sender === loggedemail)return 
   setchat((prev)=>[
@@ -147,6 +165,8 @@ useEffect(()=>{
   const isonline=onlineusers.has(slt.friends_email)
   setstatus(isonline ? "online":"offline")
 },[onlineusers,slt])
+
+
 
 
 
@@ -180,8 +200,35 @@ frd.map((fr,i)=>(
   {
 slt && (
 <div>
-  <h1>{`chat with ${slt.friends_email}`} {status}</h1>
-<textarea name="textarea" className='textarea' placeholder='Write the message' value={msg} onChange={(e)=>setmsg(()=>e.target.value)}/>
+  <h1>{`chat with ${slt.friends_email}`} {status} {typing && "typing..."}</h1>
+  <textarea
+  className='textarea'
+  value={msg}
+  placeholder='Write the message'
+  onChange={(e) => {
+    setmsg(e.target.value);
+
+    // emit typing
+    if (socketref.current && slt) {
+      socketref.current.emit("typing", {
+        sender: loggedemail,
+        reciver: slt.friends_email
+      });
+
+      // debounce stop typing
+      if (typingtimeout.current) {
+        clearTimeout(typingtimeout.current);
+      }
+
+      typingtimeout.current = setTimeout(() => {
+        socketref.current.emit("stop_typing", {
+          sender: loggedemail,
+          reciver: slt.friends_email
+        });
+      }, 800);
+    }
+  }}
+/>
 <button onClick={sendmessage}>send</button>
 <input type="file"  onChange={(e)=>setdoc(e.target.files[0])}  />
 <div>
